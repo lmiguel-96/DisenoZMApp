@@ -1,0 +1,17 @@
+@import "../../../theme/theme-variables.scss";
+
+:host {
+  position: relative;
+}
+
+.mat-progress-spinner {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.message {
+  margin-left: 0.5em;
+  color: map-get($mat-cyan, "A700");
+  font-weight: bold;
+  text-transform: uppercase;
+}

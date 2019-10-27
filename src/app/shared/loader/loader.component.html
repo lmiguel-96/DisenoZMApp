@@ -1,0 +1,16 @@
+<div *ngIf="!isLoading; else loadingState" [style.width.%]="100" [style.height.%]="100">
+  <ng-content></ng-content>
+</div>
+
+<ng-template #loadingState>
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxLayoutGap="5px"
+    [style.min-width]="width"
+    [style.min-height]="height"
+  >
+    <mat-progress-spinner mode="indeterminate" [strokeWidth]="6" [diameter]="32 * size"></mat-progress-spinner>
+    <span class="message mat-body-strong">{{ message }}</span>
+  </div>
+</ng-template>

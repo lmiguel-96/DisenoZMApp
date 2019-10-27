@@ -1,0 +1,64 @@
+<app-loader
+  *ngIf="{ isLoading: isLoading | async, servicesCategories: servicesCategories$ | async } as state"
+  [isLoading]="state.isLoading"
+  message="Cargando..."
+  height="400px"
+  width="100%"
+>
+  <form [formGroup]="serviceForm">
+    <h1 mat-dialog-title class="mat-title">Servicio de {{ serviceForm.value.name }}</h1>
+    <div mat-dialog-content class="mat-body h-100">
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="50%" fxFlexFill>
+          <mat-label>Nombre del servicio</mat-label>
+          <input matInput formControlName="name" />
+          <mat-icon matSuffix></mat-icon>
+          <mat-hint>Indique el nombre del servicio</mat-hint>
+          <mat-error>Indique el nombre del servicio, requerido</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="50%" fxFlexFill>
+          <mat-label>Categoría</mat-label>
+          <mat-select [formControl]="serviceForm.get('categories')" [compareWith]="compareServiceCategory" multiple>
+            <mat-option
+              *ngFor="let category of state.servicesCategories; trackBy: trackByCategory"
+              [value]="category"
+              [id]="category?.serviceCategoryID"
+              >{{ category?.name | titlecase }}</mat-option
+            >
+          </mat-select>
+          <mat-hint>Indique la(s) categoría(s) del servicio</mat-hint>
+          <mat-error>Indique la(s) categoría(s) del servicio, requerido</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
+          <mat-label>Costo del servicio</mat-label>S
+          <input matInput formControlName="price" type="number" />
+          <mat-icon matSuffix></mat-icon>
+          <mat-hint>Indique el costo del servicio</mat-hint>
+          <mat-error>Indique el costo del servicio, requerido</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+          <mat-icon matSuffix>notes</mat-icon>
+          <mat-hint>Notas u observaciones (opcional)</mat-hint>
+        </mat-form-field>
+      </div>
+      <input type="hidden" formControlName="serviceID" />
+    </div>
+    <div mat-dialog-actions fxLayoutAlign="end center">
+      <button type="button" mat-button color="warn" (click)="handleCloseDialog()">Cerrar</button>
+      <button type="submit" mat-button cdkFocusInitial color="primary">
+        <ng-container *ngIf="!data?.service">
+          Crear servicio
+        </ng-container>
+        <ng-container *ngIf="data?.service">
+          Actualizar servicio
+        </ng-container>
+      </button>
+    </div>
+  </form>
+</app-loader>

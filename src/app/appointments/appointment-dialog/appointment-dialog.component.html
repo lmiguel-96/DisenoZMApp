@@ -1,0 +1,124 @@
+<app-loader [isLoading]="isLoading | async" message="Agendando cita" height="400px" width="100%">
+  <form [formGroup]="appointmentForm" (ngSubmit)="handleSetAppointment(appointmentForm)">
+    <h1 mat-dialog-title class="mat-title">
+      Cita para el dia {{ data?.selectedDate | date: 'fullDate' }} {{ data?.selectedEvent?.dueDate | date: 'fullDate' }}
+    </h1>
+    <div mat-dialog-content class="mat-body h-100">
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="50%" fxFlexFill>
+          <mat-label>Paciente</mat-label>
+          <input
+            matInput
+            placeholder="Paciente"
+            formControlName="patient"
+            (keyup)="patientSearchInput.next($event.target.value)"
+            [matAutocomplete]="patientAutocomplete"
+          />
+          <mat-autocomplete
+            #patientAutocomplete="matAutocomplete"
+            [autoActiveFirstOption]="false"
+            [displayWith]="displayName"
+          >
+            <mat-option *ngFor="let patient of patients$ | async" [value]="patient">
+              {{ patient.name }}
+              {{ patient.lastName }}</mat-option
+            >
+          </mat-autocomplete>
+          <mat-icon matSuffix>airline_seat_recline_extra</mat-icon>
+          <mat-hint>Nombre del paciente</mat-hint>
+          <mat-error>Nombre del paciente, requerido</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="50%" fxFlexFill>
+          <mat-label>Odontólogo(a)</mat-label>
+          <input
+            matInput
+            placeholder="Odontólogo"
+            formControlName="dentist"
+            (keyup)="dentistSearchInput.next($event.target.value)"
+            [matAutocomplete]="dentistAutocomplete"
+          />
+          <mat-autocomplete
+            #dentistAutocomplete="matAutocomplete"
+            [autoActiveFirstOption]="false"
+            [displayWith]="displayName"
+          >
+            <mat-option *ngFor="let dentist of dentists$ | async" [value]="dentist">
+              {{ dentist.name }}
+              {{ dentist.lastName }}</mat-option
+            >
+          </mat-autocomplete>
+          <mat-icon matSuffix [owlDateTimeTrigger]="dt1">person</mat-icon>
+          <mat-hint>Odontologo(a) con quien se agendará la cita</mat-hint>
+          <mat-error>Odontologo(a) con quien se agendará la cita, requerido</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
+          <mat-label>Hora de cita</mat-label>
+          <input
+            matInput
+            [owlDateTime]="dt1"
+            selectMode="range"
+            [owlDateTimeTrigger]="dt1"
+            formControlName="time"
+            [min]="minTime$ | async"
+            [max]="maxTime$ | async"
+          />
+          <mat-icon matSuffix>schedule</mat-icon>
+          <mat-hint>Indique la(s) hora(s) para la cita</mat-hint>
+          <mat-error>Indique la(s) hora(s) para la cita, requerido</mat-error>
+          <owl-date-time
+            #dt1
+            stepMinute="5"
+            pickerType="timer"
+            pickerMode="popup"
+            hour12Timer
+            panelClass="mat-body"
+          ></owl-date-time>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+          <mat-icon matSuffix>notes</mat-icon>
+          <mat-hint>Notas u observaciones (opcional)</mat-hint>
+        </mat-form-field>
+      </div>
+      <input type="hidden" formControlName="dueDate" />
+      <input type="hidden" formControlName="lastUpdate" />
+      <input type="hidden" formControlName="status" />
+      <input type="hidden" formControlName="title" />
+      <input type="hidden" formControlName="appointmentID" />
+    </div>
+    <div mat-dialog-actions fxLayoutAlign="end center">
+      <button type="button" mat-button color="warn" (click)="handleCloseDialog()">Cerrar</button>
+      <button
+        type="button"
+        mat-button
+        color="warn"
+        *ngIf="data?.selectedEvent"
+        (click)="isLoading.next(true); handleCancelAppointment(appointmentForm)"
+      >
+        Cancelar cita
+      </button>
+      <button
+        type="button"
+        mat-button
+        color="accent"
+        *ngIf="data?.selectedEvent"
+        (click)="isLoading.next(true); handleCompleteAppointment(appointmentForm)"
+      >
+        Marcar completada
+      </button>
+      <button type="submit" mat-button cdkFocusInitial color="primary">
+        <ng-container *ngIf="data?.selectedDate">
+          Crear cita
+        </ng-container>
+        <ng-container *ngIf="data?.selectedEvent">
+          Actualizar Cita
+        </ng-container>
+      </button>
+    </div>
+  </form>
+</app-loader>

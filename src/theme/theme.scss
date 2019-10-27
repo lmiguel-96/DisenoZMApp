@@ -1,0 +1,38 @@
+/*
+ * Global application theme.
+ * Framework overrides and customization goes here.
+ */
+
+// stylelint-disable-next-line selector-max-universal
+
+@import "~@angular/material/theming";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100%;
+}
+
+.ev-active {
+  background-color: map-get($mat-cyan, A700) !important;
+  color: whitesmoke !important;
+  border: solid 1px #2c3e50 !important;
+}
+
+.ev-cancelled {
+  background-color: map-get($mat-red, A700) !important;
+  color: whitesmoke !important;
+  border: solid 1px #2c3e50 !important;
+}
+
+.ev-completed {
+  background-color: map-get($mat-light-green, A700) !important;
+  color: whitesmoke !important;
+  border: solid 1px #2c3e50 !important;
+}

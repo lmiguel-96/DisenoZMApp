@@ -1,0 +1,26 @@
+<div class="container">
+  <mat-card class="mat-elevation-z2">
+    <mat-card-content>
+      <full-calendar
+        #calendar
+        (dateClick)="handleOpenAppointmentDialog($event)"
+        (datesRender)="calendarInit$.next(); handleAppointmentsDateRangeChanged($event.view); handleGetAppointments()"
+        (eventClick)="handleViewEvetnDetails($event.event)"
+        (eventDrop)="handleEventDateChange($event.event)"
+        displayEventEnd="false"
+        editable="true"
+        [hiddenDays]="hiddenDays"
+        [buttonText]="buttonText"
+        defaultView="dayGridMonth"
+        [plugins]="calendarPlugins"
+        locale="es"
+        [events]="calendarEvents$ | async"
+        [header]="{
+          left: 'prev, next today',
+          center: 'title',
+          right: 'dayGridMonth, dayGridWeek'
+        }"
+      ></full-calendar>
+    </mat-card-content>
+  </mat-card>
+</div>
