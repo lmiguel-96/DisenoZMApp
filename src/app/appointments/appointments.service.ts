@@ -20,7 +20,7 @@ export class AppointmentsService extends ObservableStore<StoreState> implements 
   appointmentsSubscription: Subscription;
 
   constructor(private angularFirestore: AngularFirestore) {
-    super({ trackStateHistory: true });
+    super({});
   }
 
   setAppointmentsDateRange(activeStart: DateInput, activeEnd: DateInput): void {
@@ -65,6 +65,7 @@ export class AppointmentsService extends ObservableStore<StoreState> implements 
             userRef
               .where('role', 'array-contains', 3)
               .orderBy('name')
+              .orderBy('lastName')
               .startAt(startTerm)
               .endAt(endTerm)
               .limit(5)
@@ -76,12 +77,9 @@ export class AppointmentsService extends ObservableStore<StoreState> implements 
 
   getAppointments(): void {
     const { activeStart, activeEnd } = this.getState().appointmentsDateRange;
-    if (this.appointmentsSubscription) {
-      this.appointmentsSubscription.unsubscribe();
-      this.appointmentsSubscription = this.fetchAppointments(activeStart, activeEnd);
-    } else {
-      this.appointmentsSubscription = this.fetchAppointments(activeStart, activeEnd);
-    }
+    // tslint:disable-next-line: curly
+    if (this.appointmentsSubscription) this.appointmentsSubscription.unsubscribe();
+    this.appointmentsSubscription = this.fetchAppointments(activeStart, activeEnd);
   }
 
   fetchAppointments(activeStart: DateInput, activeEnd: DateInput): Subscription {
@@ -137,13 +135,13 @@ export class AppointmentsService extends ObservableStore<StoreState> implements 
         lastName: appointmentFormValues.dentist.lastName,
         name: appointmentFormValues.dentist.name,
         phoneNumber: appointmentFormValues.dentist.phoneNumber,
-        uid: appointmentFormValues.dentist.uid
+        userID: appointmentFormValues.dentist.userID
       },
       patient: {
         lastName: appointmentFormValues.patient.lastName,
         name: appointmentFormValues.patient.name,
         phoneNumber: appointmentFormValues.patient.phoneNumber,
-        uid: appointmentFormValues.patient.uid
+        userID: appointmentFormValues.patient.userID
       },
       title: `${appointmentFormValues.patient.name} ${appointmentFormValues.patient.lastName}`,
       description: appointmentFormValues.description,

@@ -1,4 +1,4 @@
-<app-loader [isLoading]="isLoading | async" message="Agendando cita" height="400px" width="100%">
+<app-loader [isLoading]="isLoading | async" message="Cargando..." height="400px" width="100%">
   <form [formGroup]="appointmentForm" (ngSubmit)="handleSetAppointment(appointmentForm)">
     <h1 mat-dialog-title class="mat-title">
       Cita para el dia {{ data?.selectedDate | date: 'fullDate' }} {{ data?.selectedEvent?.dueDate | date: 'fullDate' }}
@@ -47,7 +47,7 @@
               {{ dentist.lastName }}</mat-option
             >
           </mat-autocomplete>
-          <mat-icon matSuffix [owlDateTimeTrigger]="dt1">person</mat-icon>
+          <mat-icon matSuffix>person</mat-icon>
           <mat-hint>Odontologo(a) con quien se agendará la cita</mat-hint>
           <mat-error>Odontologo(a) con quien se agendará la cita, requerido</mat-error>
         </mat-form-field>
@@ -61,10 +61,10 @@
             selectMode="range"
             [owlDateTimeTrigger]="dt1"
             formControlName="time"
-            [min]="minTime$ | async"
-            [max]="maxTime$ | async"
+            [min]="minTime | async"
+            [max]="maxTime | async"
           />
-          <mat-icon matSuffix>schedule</mat-icon>
+          <mat-icon matSuffix [owlDateTimeTrigger]="dt1">schedule</mat-icon>
           <mat-hint>Indique la(s) hora(s) para la cita</mat-hint>
           <mat-error>Indique la(s) hora(s) para la cita, requerido</mat-error>
           <owl-date-time
@@ -111,7 +111,7 @@
       >
         Marcar completada
       </button>
-      <button type="submit" mat-button cdkFocusInitial color="primary">
+      <button type="submit" mat-button cdkFocusInitial color="primary" [disabled]="isLoading | async">
         <ng-container *ngIf="data?.selectedDate">
           Crear cita
         </ng-container>

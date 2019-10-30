@@ -5,7 +5,7 @@
   height="400px"
   width="100%"
 >
-  <form [formGroup]="serviceForm">
+  <form [formGroup]="serviceForm" (ngSubmit)="handleSetService(serviceForm)">
     <h1 mat-dialog-title class="mat-title">Servicio de {{ serviceForm.value.name }}</h1>
     <div mat-dialog-content class="mat-body h-100">
       <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
@@ -32,9 +32,8 @@
       </div>
       <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
         <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
-          <mat-label>Costo del servicio</mat-label>S
+          <mat-label>Costo del servicio</mat-label>
           <input matInput formControlName="price" type="number" />
-          <mat-icon matSuffix></mat-icon>
           <mat-hint>Indique el costo del servicio</mat-hint>
           <mat-error>Indique el costo del servicio, requerido</mat-error>
         </mat-form-field>
@@ -43,7 +42,6 @@
         <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
           <mat-label>Descripción</mat-label>
           <textarea matInput formControlName="description"></textarea>
-          <mat-icon matSuffix>notes</mat-icon>
           <mat-hint>Notas u observaciones (opcional)</mat-hint>
         </mat-form-field>
       </div>

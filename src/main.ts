@@ -11,10 +11,17 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from '@app/app.module';
 import { environment } from '@env/environment';
 import { hmrBootstrap } from './hmr';
+import { ObservableStore } from '@codewithdan/observable-store';
 
 if (environment.production) {
   enableProdMode();
 }
+
+ObservableStore.globalSettings = {
+  isProduction: environment.production,
+  trackStateHistory: !environment.production,
+  logStateChanges: !environment.production
+};
 
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
 

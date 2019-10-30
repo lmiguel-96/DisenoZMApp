@@ -3,9 +3,11 @@ import { ObservableStore } from '@codewithdan/observable-store';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { StoreState } from '@app/core/models/store.model';
-import { map, switchMap } from 'rxjs/operators';
-import { iif, of } from 'rxjs';
+import { map, switchMap, retryWhen } from 'rxjs/operators';
+import { of, fromEvent } from 'rxjs';
 import { User } from '@app/core/models/user.model';
+import { NotificationService } from '../notification.service';
+import { Router } from '@angular/router';
 
 const INITIAL_STATE = {
   user: null as User,
@@ -13,7 +15,7 @@ const INITIAL_STATE = {
 };
 
 export enum CredentialStoreActions {
-  setInitialState = 'INITIAL_STATE_CREDENTIALS',
+  setInitialStateCredentials = 'INITIAL_STATE_CREDENTIALS',
   setActiveUser = 'SET_ACTIVE_USER',
   setAuthState = 'SET_AUTH_STATE'
 }
@@ -26,11 +28,14 @@ export enum CredentialStoreActions {
   providedIn: 'root'
 })
 export class CredentialsService extends ObservableStore<StoreState> {
-  constructor(private angularFireAuth: AngularFireAuth, private angularFireStore: AngularFirestore) {
-    super({
-      trackStateHistory: true
-    });
-    this.setState(INITIAL_STATE, CredentialStoreActions.setInitialState);
+  constructor(
+    private angularFireAuth: AngularFireAuth,
+    private angularFireStore: AngularFirestore,
+    private router: Router,
+    private notificationService: NotificationService
+  ) {
+    super({});
+    this.setState(INITIAL_STATE, CredentialStoreActions.setInitialStateCredentials);
     this.fetchAuthState();
   }
 
@@ -42,14 +47,30 @@ export class CredentialsService extends ObservableStore<StoreState> {
             ? this.angularFireStore
                 .doc(`users/${authState.uid}`)
                 .snapshotChanges()
-                .pipe(map(userDoc => userDoc.payload.data()))
+                .pipe(
+                  map(userDoc => {
+                    const user = userDoc.payload.data() as User;
+                    if (user.status === 'inactive') {
+                      this.angularFireAuth.auth.signOut().then(() => {
+                        this.router.navigate(['/login']);
+                        this.notificationService.userBanned();
+                        this.setState({ isAuthenticated: false }, CredentialStoreActions.setAuthState);
+                        this.setState({ currentUser: null }, CredentialStoreActions.setActiveUser);
+                      });
+                      return null;
+                    } else {
+                      return user;
+                    }
+                  })
+                )
             : of(null);
-        })
+        }),
+        retryWhen(() => fromEvent(window, 'online'))
       )
       .subscribe({
-        next: user => {
+        next: (user: User) => {
           this.setState({ isAuthenticated: Boolean(user) }, CredentialStoreActions.setAuthState);
-          this.setState({ user }, CredentialStoreActions.setActiveUser);
+          this.setState({ currentUser: user }, CredentialStoreActions.setActiveUser);
         }
       });
   }
@@ -68,7 +89,7 @@ export class CredentialsService extends ObservableStore<StoreState> {
    * @return The user credentials or null if the user is not authenticated.
    */
   get credentials(): User | null {
-    const { user } = this.getState();
+    const { currentUser: user } = this.getState();
     return user;
   }
 }

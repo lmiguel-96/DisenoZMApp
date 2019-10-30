@@ -24,6 +24,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { LOCALE_ID } from '@angular/core';
 import localeEs from '@angular/common/locales/es-VE';
 import { registerLocaleData } from '@angular/common';
+import { UsersModule } from './users/users.module';
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -48,6 +49,7 @@ registerLocaleData(localeEs);
     AppointmentsModule,
     ServicesModule,
     LoginModule,
+    UsersModule,
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],

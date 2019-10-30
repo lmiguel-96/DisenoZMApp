@@ -4,11 +4,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MaterialModule } from '@app/material.module';
-import { ServicesRoutingModule } from './services-routing.module';
-import { ServiceDialogComponent } from './service-dialog/service-dialog.component';
+import { UsersRoutingModule } from './users-routing.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   imports: [
@@ -16,11 +14,10 @@ import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.componen
     TranslateModule,
     FlexLayoutModule,
     MaterialModule,
-    ServicesRoutingModule,
+    UsersRoutingModule,
     SharedModule,
     ReactiveFormsModule
   ],
-  declarations: [ServicesRoutingModule.components, ServiceDialogComponent, ConfirmDialogComponent],
-  entryComponents: [ServiceDialogComponent, ConfirmDialogComponent]
+  declarations: [UsersRoutingModule.components]
 })
-export class ServicesModule {}
+export class UsersModule {}

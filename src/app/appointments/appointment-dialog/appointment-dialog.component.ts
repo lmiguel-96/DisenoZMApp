@@ -23,8 +23,7 @@ interface DialogData {
   selector: 'dzm-appointment-dialog',
   templateUrl: './appointment-dialog.component.html',
   styleUrls: ['./appointment-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [AppointmentsService, NotificationService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppointmentDialogComponent {
   appointmentForm = this.createAppointmentForm(this.data);
@@ -37,12 +36,12 @@ export class AppointmentDialogComponent {
   dentists$ = this.appointmentsService
     .searchDentists(this.dentistSearchInput)
     .pipe(map(dentists => dentists.map(dentist => dentist.payload.doc.data() as User)));
-  minTime$ = new BehaviorSubject<Date>(
+  minTime = new BehaviorSubject<Date>(
     moment(this.appointmentForm.value.dueDate)
       .set({ hour: 8, minute: 0, seconds: 0, millisecond: 0 })
       .toDate()
   );
-  maxTime$ = new BehaviorSubject<Date>(
+  maxTime = new BehaviorSubject<Date>(
     moment(this.appointmentForm.value.dueDate)
       .set({ hour: 17, minute: 0, seconds: 0, millisecond: 0 })
       .toDate()
@@ -65,9 +64,9 @@ export class AppointmentDialogComponent {
       this.isLoading.next(true);
       this.appointmentsService
         .setAppointment(appointmentForm.value)
-        .then(wasSet => {
-          this.notificationService.appointmentCreated(wasSet);
-          if (wasSet) {
+        .then((result: boolean) => {
+          this.notificationService.appointmentCreated(result);
+          if (result) {
             this.handleCloseDialog();
           }
         })
@@ -108,7 +107,7 @@ export class AppointmentDialogComponent {
       dentist: [null, Validators.required],
       dueDate: [selectedDate, Validators.required],
       time: [null, Validators.required],
-      status: ['active', Validators.required],
+      status: ['active'],
       lastUpdate: [new Date(), Validators.required],
       title: [null],
       description: [null]

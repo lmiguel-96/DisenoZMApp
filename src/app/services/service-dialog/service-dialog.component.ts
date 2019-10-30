@@ -5,6 +5,8 @@ import { NotificationService } from '@app/core/notification.service';
 import { ServicesService } from '../services.service';
 import { Service, ServiceCategory } from '@app/core/models/service.model';
 import { BehaviorSubject } from 'rxjs';
+import { pluck, filter } from 'rxjs/operators';
+import { StoreState } from '@app/core/models/store.model';
 
 /**
  * IN ORDER TO DETERMINATE WETHER THE DIALOG IS CREATING OR EDITING AN EVENT, IT ACTUALLY RELIES ON
@@ -18,13 +20,15 @@ interface DialogData {
   selector: 'dzm-service-dialog',
   templateUrl: './service-dialog.component.html',
   styleUrls: ['./service-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ServicesService, NotificationService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServiceDialogComponent {
   serviceForm = this.createServiceForm(this.data);
   isLoading = new BehaviorSubject<boolean>(false);
-  servicesCategories$ = this.servicesService.fetchServiceCategories();
+  servicesCategories$ = this.servicesService.stateChanged.pipe(
+    filter((state: StoreState) => Boolean(state && state.servicesCategories)),
+    pluck('servicesCategories')
+  );
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -38,15 +42,11 @@ export class ServiceDialogComponent {
     this.dialogRef.close();
   }
 
-  valchange(): void {
-    console.log(this.serviceForm.value);
-  }
-
   createServiceForm({ service }: DialogData = this.data): FormGroup {
     const form = this.formBuilder.group({
       serviceID: null,
       name: [null, Validators.required],
-      description: [null, Validators.required],
+      description: [null],
       categories: [null, Validators.required],
       price: [null, Validators.required]
     });
@@ -56,11 +56,30 @@ export class ServiceDialogComponent {
     return form;
   }
 
+  handleSetService(serviceForm: FormGroup): void {
+    if (serviceForm.valid) {
+      this.isLoading.next(true);
+      this.servicesService
+        .setService(serviceForm.value)
+        .then(wasSet => {
+          this.notificationService.serviceCreated(wasSet);
+          if (wasSet) {
+            this.handleCloseDialog();
+          }
+        })
+        .finally(() => this.isLoading.next(false));
+    } else {
+      serviceForm.markAllAsTouched();
+    }
+  }
+
   trackByCategory(index: number, serviceCategory: ServiceCategory): string {
     return serviceCategory.serviceCategoryID;
   }
 
   compareServiceCategory(serviceOne: ServiceCategory, serviceTwo: ServiceCategory): boolean {
-    return serviceOne.serviceCategoryID === serviceTwo.serviceCategoryID;
+    if (serviceOne !== null && serviceTwo !== null) {
+      return serviceOne.serviceCategoryID === serviceTwo.serviceCategoryID;
+    }
   }
 }

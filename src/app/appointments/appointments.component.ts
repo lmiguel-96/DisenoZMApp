@@ -17,8 +17,7 @@ import * as moment from 'moment';
   selector: 'dzm-appointments',
   templateUrl: './appointments.component.html',
   styleUrls: ['./appointments.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NotificationService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppointmentsComponent {
   @ViewChild('calendar', { static: true }) calendarComponent: FullCalendarComponent;

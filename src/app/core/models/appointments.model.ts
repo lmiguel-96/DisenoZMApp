@@ -9,13 +9,13 @@ export interface Appointment {
   patient: {
     name: string;
     lastName: string;
-    uid: string;
+    userID: string;
     phoneNumber: string;
   };
   dentist: {
     name: string;
     lastName: string;
-    uid: string;
+    userID: string;
     phoneNumber: string;
   };
   title: string;

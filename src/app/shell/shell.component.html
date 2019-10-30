@@ -2,6 +2,7 @@
   <mat-sidenav-container fxFill>
     <mat-sidenav
       #sidenav
+      [style.position]="'fixed'"
       [mode]="isMobile ? 'over' : 'side'"
       [opened]="!isMobile"
       [disableClose]="!isMobile"
@@ -17,11 +18,11 @@
           <mat-menu #userMenu="matMenu">
             <mat-list>
               <mat-list-item>
-                <span translate>Logged in as</span>&nbsp;<b>{{ username$ | async }}</b>
+                <span>Iniciaste sesión como</span>&nbsp;<b>{{ username$ | async }}</b>
               </mat-list-item>
               <mat-divider></mat-divider>
             </mat-list>
-            <button mat-menu-item (click)="logout()" translate>Logout</button>
+            <button mat-menu-item (click)="logout()" translate>Cerrar sesión</button>
           </mat-menu>
         </div>
       </mat-toolbar>
@@ -36,6 +37,21 @@
             <span translate>Servicios</span>
           </a>
           <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/services" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <span translate>Inventario</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/services" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <span translate>Pagos</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/users" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <span translate>Usuarios</span>
+          </a>
+          <mat-divider></mat-divider>
+          <a mat-list-item routerLink="/services" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <span translate>Servicios</span>
+          </a>
         </mat-list>
       </nav>
     </mat-sidenav>
