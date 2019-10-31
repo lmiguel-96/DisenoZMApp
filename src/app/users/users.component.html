@@ -20,7 +20,6 @@
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns"
-          (click)="handleOpenServiceDialog(row)"
           [ngClass]="{ 'user-blocked': row.status === 'inactive' }"
         ></tr>
 
@@ -82,22 +81,22 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #appMenu="matMenu">
-              <button mat-menu-item (click)="handleOpenServiceDialog(element)">
+              <button mat-menu-item (click)="handleOpenUserDialog(element)">
                 <mat-icon>group_add</mat-icon>
                 <span>Editar nivel de acceso</span>
               </button>
               <button mat-menu-item (click)="handleUnlockUser(element)" *ngIf="element.status === 'inactive'">
-                <mat-icon>add_circle</mat-icon>
+                <mat-icon>verified_user</mat-icon>
                 <span>Habilitar acceso</span>
               </button>
               <button mat-menu-item (click)="handleLockUser(element)" *ngIf="element.status === 'active'">
                 <mat-icon>block</mat-icon>
                 <span>Deshabilitar acceso</span>
               </button>
-              <!-- <button mat-menu-item (click)="handleOpenConfirmDialog(element)">
-                <mat-icon>delete</mat-icon>
-                <span>Eliminar usuario</span>
-              </button> -->
+              <button mat-menu-item (click)="handleRecoverPassword(element)">
+                <mat-icon>email_outline</mat-icon>
+                <span>Recuperar contraseña</span>
+              </button>
             </mat-menu>
           </td>
         </ng-container>

@@ -43,6 +43,14 @@ export class ServicesService extends ObservableStore<StoreState> {
   setService(service: Service): Promise<boolean> {
     const currentService: Service = {
       ...service,
+      categories: service.categories
+        .map((category: any) => {
+          return [category.serviceCategoryID, category];
+        })
+        .reduce((categories: { [key: string]: ServiceCategory }, [key, value]: [string, ServiceCategory]) => {
+          categories[key] = value;
+          return categories;
+        }, {}),
       serviceID: service.serviceID ? service.serviceID : this.angularFirestore.createId()
     };
     return new Promise(resolve => {
@@ -77,7 +85,7 @@ export class ServicesService extends ObservableStore<StoreState> {
             return {
               ...service,
               serviceID: services.payload.doc.id,
-              categories: Object.entries(service.categories).map(([key, value]) => {
+              categories: Object.entries(service.categories).map(([key, value]: [string, ServiceCategory]) => {
                 return { serviceCategoryID: key, img: '', description: '', ...value } as ServiceCategory;
               })
             } as Service;

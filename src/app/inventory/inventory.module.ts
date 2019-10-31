@@ -4,8 +4,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MaterialModule } from '@app/material.module';
-import { ServicesRoutingModule } from './services-routing.module';
-import { ServiceDialogComponent } from './service-dialog/service-dialog.component';
+import { InventoryRoutingModule } from './inventory-routing.module';
+import { InventoryDialogComponent } from './inventory-dialog/inventory-dialog.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -15,11 +15,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     TranslateModule,
     FlexLayoutModule,
     MaterialModule,
-    ServicesRoutingModule,
+    InventoryRoutingModule,
     SharedModule,
     ReactiveFormsModule
   ],
-  declarations: [ServicesRoutingModule.components, ServiceDialogComponent],
-  entryComponents: [ServiceDialogComponent]
+  declarations: [InventoryRoutingModule.components, InventoryDialogComponent],
+  entryComponents: [InventoryDialogComponent]
 })
-export class ServicesModule {}
+export class InventoryModule {}

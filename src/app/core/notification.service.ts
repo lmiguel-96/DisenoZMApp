@@ -15,7 +15,8 @@ export class NotificationService {
 
   userBanned(): void {
     this.matSnackBar.open(
-      `Tu cuenta fue deshabilitada, si crees que hubo un error por favor contacta al administrador`,
+      `Tu cuenta está desactivada, si crees que hubo un error o eres un nuevo usuario,
+      por favor contacta al administrador`,
       'Aceptar',
       {
         politeness: 'assertive'
@@ -30,6 +31,45 @@ export class NotificationService {
       por favor verifica tu conexión e intenta nuevamente`;
     this.matSnackBar.open(message, 'Aceptar', {
       politeness: 'assertive'
+    });
+  }
+
+  userRecoveryPasswordSent(wasSuccesful: boolean, email: string) {
+    const message = wasSuccesful
+      ? `Será enviado un correo electrónico con las instrucciones para recuperar la contraseña
+      al correo electrónico ${email}`
+      : `Ocurrió un error y no pudo ser enviado el correo de recuperación de contraseña,
+      por favor verifica tu conexión e intenta nuevamente`;
+    this.matSnackBar.open(message, 'Aceptar', {
+      politeness: 'assertive'
+    });
+  }
+
+  userRoleUpdated(wasSuccesful: boolean) {
+    const message = wasSuccesful
+      ? 'El nivel de acceso del usuario actualizado exitosamente'
+      : `Ocurrió un error y no pudo ser actualizado el nivel de acceso del usuario,
+      por favor verifica tu conexión e intenta nuevamente`;
+    this.matSnackBar.open(message, 'Aceptar', {
+      politeness: 'assertive'
+    });
+  }
+
+  resourceCreated(wasSuccesful: boolean): void {
+    const message = wasSuccesful
+      ? '¡Item actualizado exitosamente!'
+      : `Upss algo salió mal y el item no pudo ser actualizado, por favor intenta nuevamente`;
+    this.matSnackBar.open(message, 'Aceptar', {
+      politeness: 'polite'
+    });
+  }
+
+  resourceDeleted(wasSuccesful: boolean): void {
+    const message = wasSuccesful
+      ? '¡Item eliminado exitosamente!'
+      : `Upss algo salió mal y el item no pudo ser eliminado, por favor intenta nuevamente`;
+    this.matSnackBar.open(message, 'Aceptar', {
+      politeness: 'polite'
     });
   }
 

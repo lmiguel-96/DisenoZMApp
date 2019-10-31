@@ -6,6 +6,7 @@ import { ObservableStore } from '@codewithdan/observable-store';
 import { StoreState } from '@app/core/models/store.model';
 import { User } from '@app/core/models/user.model';
 import { UserRole } from '@app/core/models/user-roles.model';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 export enum UsersStoreActions {
   setRegisteredUsers = 'ADD_REGISTERED_USERS',
@@ -23,9 +24,18 @@ const INITIAL_STATE = {
 })
 export class UsersService extends ObservableStore<StoreState> {
   serviceDataSubscription: Subscription;
-  constructor(private angularFirestore: AngularFirestore) {
+  constructor(private angularFirestore: AngularFirestore, private angularFireAuth: AngularFireAuth) {
     super({});
     this.setState(INITIAL_STATE, UsersStoreActions.setInitialStateUsers);
+  }
+
+  recoverPassword({ email }: User): Promise<boolean> {
+    return new Promise(resolve => {
+      this.angularFireAuth.auth
+        .sendPasswordResetEmail(email)
+        .then(() => resolve(true))
+        .catch(() => resolve(false));
+    });
   }
 
   lockUser({ userID }: User): Promise<boolean> {
@@ -45,6 +55,17 @@ export class UsersService extends ObservableStore<StoreState> {
         .collection('users')
         .doc(userID)
         .update({ status: 'active' })
+        .then(() => resolve(true))
+        .catch(() => resolve(false));
+    });
+  }
+
+  setRole({ userID, role }: User): Promise<boolean> {
+    return new Promise(resolve => {
+      this.angularFirestore
+        .collection('users')
+        .doc(userID)
+        .update({ role })
         .then(() => resolve(true))
         .catch(() => resolve(false));
     });

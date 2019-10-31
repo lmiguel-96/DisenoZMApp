@@ -7,6 +7,7 @@ import { MaterialModule } from '@app/material.module';
 import { UsersRoutingModule } from './users-routing.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { UserDialogComponent } from './user-dialog/user-dialog.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     SharedModule,
     ReactiveFormsModule
   ],
-  declarations: [UsersRoutingModule.components]
+  declarations: [UsersRoutingModule.components, UserDialogComponent],
+  entryComponents: [UserDialogComponent]
 })
 export class UsersModule {}

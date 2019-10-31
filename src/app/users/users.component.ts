@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 
-import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatDialog } from '@angular/material';
 import { UsersService } from './users.service';
 import { User } from '@app/core/models/user.model';
 import { untilDestroyed } from '@app/core';
@@ -8,6 +8,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { NotificationService } from '@app/core/notification.service';
 import { pluck, filter } from 'rxjs/operators';
 import { StoreState } from '@app/core/models/store.model';
+import { UserDialogComponent } from './user-dialog/user-dialog.component';
 
 @Component({
   selector: 'dzm-users',
@@ -20,7 +21,11 @@ export class UsersComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<User>;
   selection = new SelectionModel<User>(true, []);
 
-  constructor(private usersService: UsersService, private notificationService: NotificationService) {}
+  constructor(
+    private usersService: UsersService,
+    private notificationService: NotificationService,
+    private matDialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.handleSyncUsersData();
@@ -36,6 +41,15 @@ export class UsersComponent implements OnInit, OnDestroy {
           this.dataSource.paginator = this.paginator;
         }
       });
+  }
+
+  handleOpenUserDialog(user?: User): void {
+    this.matDialog.open(UserDialogComponent, {
+      width: '520px',
+      height: 'auto',
+      autoFocus: true,
+      data: { user }
+    });
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -64,6 +78,12 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   handleUnlockUser(user: User): void {
     this.usersService.unlockUser(user).then(result => this.notificationService.userStatusUpdated(result));
+  }
+
+  handleRecoverPassword(user: User): void {
+    this.usersService
+      .recoverPassword(user)
+      .then(result => this.notificationService.userRecoveryPasswordSent(result, user.email));
   }
 
   trackByService(index: number, service: User): string {

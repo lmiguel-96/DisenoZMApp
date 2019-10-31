@@ -1,0 +1,37 @@
+<app-loader
+  *ngIf="{ isLoading: isLoading | async, userRoles: userRoles$ | async } as state"
+  [isLoading]="state.isLoading"
+  message="Cargando..."
+  height="400px"
+  width="100%"
+>
+  <form [formGroup]="userRoleForm" (ngSubmit)="handleSetUserRole(userRoleForm)">
+    <h1 mat-dialog-title class="mat-title">
+      Nivel de acceso para el usuario {{ this.data.user.name | titlecase }} {{ this.data.user.lastName | titlecase }}
+    </h1>
+    <div mat-dialog-content class="mat-body h-100">
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="10px">
+        <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
+          <mat-label>Categoría</mat-label>
+          <mat-select [formControl]="userRoleForm.get('role')" [compareWith]="compareUserRole" multiple>
+            <mat-option
+              *ngFor="let userRole of state.userRoles; trackBy: trackByRole"
+              [value]="userRole.roleID"
+              [id]="userRole?.roleID"
+              >{{ userRole?.name | titlecase }}</mat-option
+            >
+          </mat-select>
+          <mat-hint>Indique el/los niveles de acceso del usuario</mat-hint>
+          <mat-error>Indique el/los niveles de acceso del usuario, requerido</mat-error>
+        </mat-form-field>
+      </div>
+      <input type="hidden" formControlName="userID" />
+    </div>
+    <div mat-dialog-actions fxLayoutAlign="end center">
+      <button type="button" mat-button color="warn" (click)="handleCloseDialog()">Cerrar</button>
+      <button type="submit" mat-button cdkFocusInitial color="primary">
+        Actualizar permisos
+      </button>
+    </div>
+  </form>
+</app-loader>

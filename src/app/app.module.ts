@@ -25,6 +25,7 @@ import { LOCALE_ID } from '@angular/core';
 import localeEs from '@angular/common/locales/es-VE';
 import { registerLocaleData } from '@angular/common';
 import { UsersModule } from './users/users.module';
+import { InventoryModule } from './inventory/inventory.module';
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -50,6 +51,7 @@ registerLocaleData(localeEs);
     ServicesModule,
     LoginModule,
     UsersModule,
+    InventoryModule,
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],

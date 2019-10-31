@@ -1,44 +1,44 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 
 import { MatTableDataSource, MatPaginator, MatDialog } from '@angular/material';
-import { ServicesService } from './services.service';
-import { Service } from '@app/core/models/service.model';
+import { InventoryService } from './inventory.service';
 import { untilDestroyed } from '@app/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { ServiceDialogComponent } from './service-dialog/service-dialog.component';
-import { ConfirmDialogComponent } from '@app/shared/confirm-dialog/confirm-dialog.component';
+import { InventoryDialogComponent } from './inventory-dialog/inventory-dialog.component';
 import { NotificationService } from '@app/core/notification.service';
 import { pluck, filter } from 'rxjs/operators';
 import { StoreState } from '@app/core/models/store.model';
+import { Resource } from '@app/core/models/resource.model';
+import { ConfirmDialogComponent } from '@app/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
-  selector: 'dzm-services',
-  templateUrl: './services.component.html',
-  styleUrls: ['./services.component.scss']
+  selector: 'dzm-inventory',
+  templateUrl: './inventory.component.html',
+  styleUrls: ['./inventory.component.scss']
 })
-export class ServicesComponent implements OnInit, OnDestroy {
+export class InventoryComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  displayedColumns: string[] = ['name', 'categories', 'options'];
-  dataSource: MatTableDataSource<Service>;
-  selection = new SelectionModel<Service>(true, []);
+  displayedColumns: string[] = ['name', 'categories', 'currentStock', 'min', 'max', 'options'];
+  dataSource: MatTableDataSource<Resource>;
+  selection = new SelectionModel<Resource>(true, []);
 
   constructor(
-    private servicesService: ServicesService,
+    private inventoryService: InventoryService,
     private matDialog: MatDialog,
     private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
-    this.handleSyncServicesData();
-    this.servicesService.stateChanged
+    this.handleSyncInventoryData();
+    this.inventoryService.stateChanged
       .pipe(
-        filter((state: StoreState) => Boolean(state && state.services)),
-        pluck('services'),
+        filter((state: StoreState) => Boolean(state && state.resources)),
+        pluck('resources'),
         untilDestroyed(this)
       )
       .subscribe({
-        next: services => {
-          this.dataSource = new MatTableDataSource<Service>(services);
+        next: resources => {
+          this.dataSource = new MatTableDataSource<Resource>(resources);
           this.dataSource.paginator = this.paginator;
         }
       });
@@ -60,42 +60,42 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  handleSyncServicesData(): void {
-    this.servicesService.getServiceData();
+  handleSyncInventoryData(): void {
+    this.inventoryService.getInventoryData();
   }
 
-  handleOpenServiceDialog(service?: Service): void {
-    this.matDialog.open(ServiceDialogComponent, {
+  handleOpenInventoryDialog(resource?: Resource): void {
+    this.matDialog.open(InventoryDialogComponent, {
       width: '680px',
       height: 'auto',
       minHeight: '400px',
       autoFocus: true,
-      data: { service }
+      data: { resource }
     });
   }
 
-  handleOpenConfirmDialog(service: Service): void {
+  handleOpenConfirmDialog(resource: Resource): void {
     const dialogRef = this.matDialog.open(ConfirmDialogComponent, {
       width: '400px',
       height: 'auto',
       data: {
-        title: '¿Seguro que deseas eliminar este servicio?',
-        body: `"${service.name}"`
+        title: '¿Seguro que deseas eliminar este item?',
+        body: `"${resource.name}"`
       }
     });
     dialogRef.afterClosed().subscribe({
       next: (shouldDelete: boolean) => {
         if (shouldDelete) {
-          this.servicesService
-            .deleteService(service)
-            .then((result: boolean) => this.notificationService.serviceDeleted(result));
+          this.inventoryService
+            .deleteResource(resource)
+            .then((result: boolean) => this.notificationService.resourceDeleted(result));
         }
       }
     });
   }
 
-  trackByService(index: number, service: Service): string {
-    return service.serviceID;
+  trackByItem(index: number, item: Resource): string {
+    return item.resourceID;
   }
 
   ngOnDestroy(): void {}
