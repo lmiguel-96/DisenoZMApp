@@ -24,6 +24,16 @@ export class NotificationService {
     );
   }
 
+  userRegistered(wasSuccesful: boolean) {
+    const message = wasSuccesful
+      ? '¡Usuario registrado exitosamente!'
+      : `Ocurrió un error y no pudo ser completado el registro,
+      por favor verifica tu conexión e intenta nuevamente`;
+    this.matSnackBar.open(message, 'Aceptar', {
+      politeness: 'assertive'
+    });
+  }
+
   userStatusUpdated(wasSuccesful: boolean) {
     const message = wasSuccesful
       ? 'Estatus del usuario actualizado exitosamente'

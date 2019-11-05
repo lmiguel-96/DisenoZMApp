@@ -1,3 +1,5 @@
+@import "~@angular/material/theming";
+
 :host {
   display: flex;
   flex: 1;
@@ -6,6 +8,7 @@
 .mat-sidenav {
   min-width: 270px;
   max-width: 28%;
+  background-color: #051e34;
 }
 
 .has-border {
@@ -17,10 +20,23 @@
 }
 
 .mat-list-item {
+  height: 32px !important;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 20px;
+  text-align: start;
   text-decoration: none;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+
+  mat-icon {
+    margin-right: 15px;
+    margin-left: 8px;
+  }
 
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -30,4 +46,8 @@
 
 mat-toolbar {
   background-color: #fafafa;
+}
+
+.active {
+  color: map-get($mat-cyan, "A700");
 }

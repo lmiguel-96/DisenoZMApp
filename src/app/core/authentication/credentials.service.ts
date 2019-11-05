@@ -89,7 +89,7 @@ export class CredentialsService extends ObservableStore<StoreState> {
    * @return The user credentials or null if the user is not authenticated.
    */
   get credentials(): User | null {
-    const { currentUser: user } = this.getState();
-    return user;
+    const { currentUser } = this.getState();
+    return currentUser;
   }
 }

@@ -16,4 +16,6 @@ export interface StoreState {
   resourcesCategories: ResourceCategory[];
   registeredUsers: User[];
   userRoles: UserRole[];
+  dentists: User[];
+  allUsers: User[];
 }

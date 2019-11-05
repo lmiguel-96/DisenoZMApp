@@ -1,19 +1,24 @@
 <div class="container">
-  <button mat-button class="float-fab" (click)="handleOpenServiceDialog()">
-    <mat-icon>add</mat-icon>
-    <span>Nuevo servicio</span>
-  </button>
-  <button mat-button class="float-fab" (click)="handleSyncServicesData()">
-    <mat-icon>sync</mat-icon>
-    <span>Refrescar</span>
-  </button>
+  <mat-card class="options-toolbar mat-elevation-z2">
+    <mat-card-content fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="row">
+        <button mat-button class="float-fab" (click)="handleOpenServiceDialog()">
+          <mat-icon>add</mat-icon>
+          <span>Nuevo servicio</span>
+        </button>
+        <button mat-button class="float-fab" (click)="handleSyncServicesData()">
+          <mat-icon>sync</mat-icon>
+          <span>Refrescar</span>
+        </button>
+      </div>
+      <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
+        <mat-label>Filtrar servicio</mat-label>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" />
+        <mat-hint>Puede buscar nombre, categoría o costo del servicio</mat-hint>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
   <div fxLayout="column">
-    <mat-form-field appearance="outline" fxFlex="100%" fxFlexFill>
-      <mat-label>Filtrar servicio</mat-label>
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar" />
-      <mat-hint>Puede buscar nombre, categoría o costo del servicio</mat-hint>
-    </mat-form-field>
-
     <div class="mat-elevation-z2" fxLayout="column" fxFlex="100%" fxFlexFill>
       <table #serviceTable mat-table [dataSource]="dataSource" [trackBy]="trackByService" fxFlex="100%" fxFlexFill>
         <!-- Checkbox Column -->

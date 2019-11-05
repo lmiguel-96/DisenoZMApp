@@ -1,0 +1,71 @@
+<div fxLayout="column" fxLayoutAlign="center center" [style.padding.px]="48">
+  <img src="assets/images/disenosonrisazm.png" alt="DSZM" />
+  <div class="mat-body register-title">Diseño de Sonrisa ZM</div>
+  <form
+    [formGroup]="registerForm"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    fxFlexFill
+    (ngSubmit)="handleRegisterSubmit(registerForm.value)"
+  >
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput type="text" formControlName="name" />
+      <mat-hint>Ingrese su nombre</mat-hint>
+      <mat-error>Ingrese su nombre, requerido</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Apellido</mat-label>
+      <input matInput type="text" formControlName="lastName" />
+      <mat-hint>Ingrese su apellido</mat-hint>
+      <mat-error>Ingrese su apellido, requerido</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Cedula</mat-label>
+      <input matInput type="text" formControlName="cedula" />
+      <mat-hint>Ingrese su cedula</mat-hint>
+      <mat-error>Ingrese su cedula, requerido</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="text" formControlName="email" />
+      <mat-hint>Ingrese su email</mat-hint>
+      <mat-error>Ingrese su email, requerido</mat-error>
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutGap="10px" [style.max-width.px]="320">
+      <mat-form-field appearance="outline" fxFlex="30%">
+        <mat-label>Operador</mat-label>
+        <mat-select [formControl]="registerForm.get('phoneOperator')">
+          <mat-option *ngFor="let operator of operators" [value]="operator">{{ operator }}</mat-option>
+        </mat-select>
+        <mat-hint>Operador</mat-hint>
+        <mat-error>Operador, requerido</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" fxFlex="70%">
+        <mat-label>Teléfono</mat-label>
+        <input matInput type="text" formControlName="phoneNumber" />
+        <mat-hint>Ingrese su teléfono</mat-hint>
+        <mat-error>Ingrese su telefono, requerido</mat-error>
+      </mat-form-field>
+    </div>
+    <mat-form-field appearance="outline">
+      <mat-label>Contraseña</mat-label>
+      <input matInput type="password" formControlName="password" />
+      <mat-hint>Ingrese su contraseña</mat-hint>
+      <mat-error>Ingrese su contraseña, requerido</mat-error>
+    </mat-form-field>
+    <br />
+    <br />
+    <button mat-raised-button type="submit" color="primary" [style.width.px]="256" [disabled]="!registerForm.valid">
+      Completar registro
+    </button>
+  </form>
+  <br />
+  <br />
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <span class="mat-body">¿Ya tienes cuenta de usuario?</span>
+    <button mat-button color="primary" [style.width.px]="256" (click)="handleLoginRequest.emit()">
+      Iniciar sesión
+    </button>
+  </div>
+</div>

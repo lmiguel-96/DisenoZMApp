@@ -10,6 +10,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireAuthGuardModule } from '@angular/fire/auth-guard';
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
 
 import { environment } from '@env/environment';
@@ -24,8 +25,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { LOCALE_ID } from '@angular/core';
 import localeEs from '@angular/common/locales/es-VE';
 import { registerLocaleData } from '@angular/common';
-import { UsersModule } from './users/users.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { PermissionsModule } from './permissions/permissions.module';
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -41,6 +42,7 @@ registerLocaleData(localeEs);
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireAuthGuardModule,
+    AngularFireFunctionsModule,
     NgxAuthFirebaseUIModule.forRoot(environment.firebase, null, {
       enableFirestoreSync: false
     }),
@@ -50,8 +52,8 @@ registerLocaleData(localeEs);
     AppointmentsModule,
     ServicesModule,
     LoginModule,
-    UsersModule,
     InventoryModule,
+    PermissionsModule,
     AppRoutingModule // must be imported as the last module as it contains the fallback route
   ],
   declarations: [AppComponent],

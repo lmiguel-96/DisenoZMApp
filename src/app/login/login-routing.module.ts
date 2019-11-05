@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { extract } from '@app/core';
 import { LoginComponent } from './login.component';
-import { redirectLoggedInTo, AngularFireAuthGuard, canActivate } from '@angular/fire/auth-guard';
+import { redirectLoggedInTo, AngularFireAuthGuard } from '@angular/fire/auth-guard';
 
 const redirectLoggedInToHome = () => redirectLoggedInTo(['home']);
 

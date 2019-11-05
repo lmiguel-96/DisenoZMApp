@@ -65,7 +65,6 @@ export class AppointmentsService extends ObservableStore<StoreState> implements 
             userRef
               .where('role', 'array-contains', 3)
               .orderBy('name')
-              .orderBy('lastName')
               .startAt(startTerm)
               .endAt(endTerm)
               .limit(5)

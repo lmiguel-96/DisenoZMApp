@@ -4,10 +4,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MaterialModule } from '@app/material.module';
-import { UsersRoutingModule } from './users-routing.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { UserDialogComponent } from './user-dialog/user-dialog.component';
+import { PermissionsRoutingModule } from './permissions-routing.module';
+import { UserDialogComponent } from './users/user-dialog/user-dialog.component';
 
 @NgModule({
   imports: [
@@ -15,11 +15,11 @@ import { UserDialogComponent } from './user-dialog/user-dialog.component';
     TranslateModule,
     FlexLayoutModule,
     MaterialModule,
-    UsersRoutingModule,
+    PermissionsRoutingModule,
     SharedModule,
     ReactiveFormsModule
   ],
-  declarations: [UsersRoutingModule.components, UserDialogComponent],
+  declarations: [PermissionsRoutingModule.components, UserDialogComponent],
   entryComponents: [UserDialogComponent]
 })
-export class UsersModule {}
+export class PermissionsModule {}

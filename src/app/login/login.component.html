@@ -1,22 +1,30 @@
 <div class="background-login mat-typography" fxFill fxLayout="row" fxLayoutAlign="start center">
   <mat-card class="mat-elevation-z6 rounded-0">
-    <ngx-auth-firebaseui-login
-      logoUrl="assets/images/disenosonrisazm.png"
-      [providers]="['EmailAndPassword']"
-      appearance="outline"
-      titleText="Diseño de Sonrisa ZM"
-      emailText="Correo electrónico"
-      emailErrorRequiredText="Por favor ingrese su correo electrónico"
-      passwordText="Contraseña"
-      passwordErrorRequiredText="Por favor ingrese su contraeña"
-      dontHaveAnAccountText="¿No tienes una cuenta de usuario?"
-      createAccountButtonText="Crear usuario"
-      orLabelText="Ó"
-      loginButtonText="Iniciar sesión"
-      forgotPasswordText="¿Olvidaste tu contraseña?"
-      messageOnAuthError="Algo salió mal, por favor intenta nuevamente"
-      messageOnAuthSuccess="¡Bienvenido!"
-      (onSuccess)="handleLoginSuccess()"
-    ></ngx-auth-firebaseui-login>
+    <ng-container [ngSwitch]="screenMode.asObservable() | async">
+      <ngx-auth-firebaseui-login
+        *ngSwitchCase="mode.loginMode"
+        logoUrl="assets/images/disenosonrisazm.png"
+        [providers]="['EmailAndPassword']"
+        appearance="outline"
+        titleText="Diseño de Sonrisa ZM"
+        emailText="Correo electrónico"
+        emailErrorRequiredText="Por favor ingrese su correo electrónico"
+        passwordText="Contraseña"
+        passwordErrorRequiredText="Por favor ingrese su contraeña"
+        dontHaveAnAccountText="¿No tienes una cuenta de usuario?"
+        createAccountButtonText="Crear usuario"
+        orLabelText="Ó"
+        loginButtonText="Iniciar sesión"
+        forgotPasswordText="¿Olvidaste tu contraseña?"
+        messageOnAuthError="Algo salió mal, por favor intenta nuevamente"
+        messageOnAuthSuccess="¡Bienvenido!"
+        (onSuccess)="handleLoginSuccess()"
+        (onCreateAccountRequested)="screenMode.next(mode.registerMode)"
+      ></ngx-auth-firebaseui-login>
+      <dzm-register
+        *ngSwitchCase="mode.registerMode"
+        (handleLoginRequest)="screenMode.next(mode.loginMode)"
+      ></dzm-register>
+    </ng-container>
   </mat-card>
 </div>

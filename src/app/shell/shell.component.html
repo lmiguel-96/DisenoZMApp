@@ -9,6 +9,7 @@
       ngClass.gt-sm="has-border"
     >
       <mat-toolbar>
+        <img src="assets/images/disenosonrisazm.png" alt="DSZM" height="40" width="40" />
         <span translate>APP_NAME</span>
         <div fxFlex></div>
         <div>
@@ -20,37 +21,35 @@
               <mat-list-item>
                 <span>Iniciaste sesión como</span>&nbsp;<b>{{ username$ | async }}</b>
               </mat-list-item>
-              <mat-divider></mat-divider>
             </mat-list>
-            <button mat-menu-item (click)="logout()" translate>Cerrar sesión</button>
+            <button mat-menu-item (click)="logout()">Cerrar sesión</button>
           </mat-menu>
         </div>
       </mat-toolbar>
       <nav>
         <mat-list>
-          <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/home" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <span translate>Citas</span>
+          <a mat-list-item routerLink="/appointments" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon>event_note</mat-icon><span>Citas</span>
           </a>
-          <mat-divider></mat-divider>
+
           <a mat-list-item routerLink="/services" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <span translate>Servicios</span>
+            <mat-icon>local_offer</mat-icon><span>Servicios</span>
           </a>
-          <mat-divider></mat-divider>
+
           <a mat-list-item routerLink="/inventory" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <span translate>Inventario</span>
+            <mat-icon>inbox</mat-icon><span>Inventario</span>
           </a>
-          <mat-divider></mat-divider>
+
           <a mat-list-item routerLink="/services" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <span translate>Pagos</span>
+            <mat-icon>attach_money</mat-icon><span>Pagos</span>
           </a>
-          <mat-divider></mat-divider>
+
           <a mat-list-item routerLink="/users" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <span translate>Usuarios</span>
+            <mat-icon>group</mat-icon><span>Usuarios</span>
           </a>
-          <mat-divider></mat-divider>
-          <a mat-list-item routerLink="/services" routerLinkActive="active" (click)="isMobile && sidenav.close()">
-            <span translate>Servicios</span>
+
+          <a mat-list-item routerLink="/help" routerLinkActive="active" (click)="isMobile && sidenav.close()">
+            <mat-icon>help</mat-icon><span>Ayuda</span>
           </a>
         </mat-list>
       </nav>
