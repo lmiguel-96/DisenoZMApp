@@ -18,7 +18,7 @@
         forgotPasswordText="¿Olvidaste tu contraseña?"
         messageOnAuthError="Algo salió mal, por favor intenta nuevamente"
         messageOnAuthSuccess="¡Bienvenido!"
-        (onSuccess)="handleLoginSuccess()"
+        (onSuccess)="handleLoginSuccess($event)"
         (onCreateAccountRequested)="screenMode.next(mode.registerMode)"
       ></ngx-auth-firebaseui-login>
       <dzm-register

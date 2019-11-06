@@ -6,8 +6,6 @@ import { StoreState } from '@app/core/models/store.model';
 import { map, switchMap, retryWhen } from 'rxjs/operators';
 import { of, fromEvent } from 'rxjs';
 import { User } from '@app/core/models/user.model';
-import { NotificationService } from '../notification.service';
-import { Router } from '@angular/router';
 
 const INITIAL_STATE = {
   user: null as User,
@@ -28,12 +26,7 @@ export enum CredentialStoreActions {
   providedIn: 'root'
 })
 export class CredentialsService extends ObservableStore<StoreState> {
-  constructor(
-    private angularFireAuth: AngularFireAuth,
-    private angularFireStore: AngularFirestore,
-    private router: Router,
-    private notificationService: NotificationService
-  ) {
+  constructor(private angularFireAuth: AngularFireAuth, private angularFireStore: AngularFirestore) {
     super({});
     this.setState(INITIAL_STATE, CredentialStoreActions.setInitialStateCredentials);
     this.fetchAuthState();
@@ -47,22 +40,7 @@ export class CredentialsService extends ObservableStore<StoreState> {
             ? this.angularFireStore
                 .doc(`users/${authState.uid}`)
                 .snapshotChanges()
-                .pipe(
-                  map(userDoc => {
-                    const user = userDoc.payload.data() as User;
-                    if (user.status === 'inactive') {
-                      this.angularFireAuth.auth.signOut().then(() => {
-                        this.router.navigate(['/login']);
-                        this.notificationService.userBanned();
-                        this.setState({ isAuthenticated: false }, CredentialStoreActions.setAuthState);
-                        this.setState({ currentUser: null }, CredentialStoreActions.setActiveUser);
-                      });
-                      return null;
-                    } else {
-                      return user;
-                    }
-                  })
-                )
+                .pipe(map(userDoc => userDoc.payload.data()))
             : of(null);
         }),
         retryWhen(() => fromEvent(window, 'online'))
@@ -73,6 +51,11 @@ export class CredentialsService extends ObservableStore<StoreState> {
           this.setState({ currentUser: user }, CredentialStoreActions.setActiveUser);
         }
       });
+  }
+
+  clearCrendentials(): void {
+    this.setState({ isAuthenticated: false }, CredentialStoreActions.setAuthState);
+    this.setState({ currentUser: null }, CredentialStoreActions.setActiveUser);
   }
 
   /**

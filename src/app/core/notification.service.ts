@@ -13,6 +13,12 @@ export class NotificationService {
     });
   }
 
+  loggedIn(name: string): void {
+    this.matSnackBar.open(`Sesión iniciada ${name}`, 'Aceptar', {
+      politeness: 'polite'
+    });
+  }
+
   userBanned(): void {
     this.matSnackBar.open(
       `Tu cuenta está desactivada, si crees que hubo un error o eres un nuevo usuario,

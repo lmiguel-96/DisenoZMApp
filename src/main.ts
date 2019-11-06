@@ -19,8 +19,8 @@ if (environment.production) {
 
 ObservableStore.globalSettings = {
   isProduction: environment.production,
-  trackStateHistory: !environment.production,
-  logStateChanges: !environment.production
+  trackStateHistory: !environment.production
+  // logStateChanges: !environment.production
 };
 
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
